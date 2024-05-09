@@ -9,7 +9,7 @@ pub struct Config {
 impl Config {
     pub fn load() -> Result<Self, config::ConfigError> {
         let mut settings = config::Config::new();
-        settings.merge(config::File::with_name("appsettings.json"))?;
+        settings.merge(config::File::with_name("appsettings.secrets.json"))?;
         settings.try_into()
     }
 }
