@@ -117,6 +117,7 @@ impl CloudingApiClient {
         &self,
         rules: &Vec<FirewallRule>,
     ) -> Result<i8, Box<dyn Error>> {
+        
         let mut counter = 0;
         for rule in rules {
             if (rule.portRangeMax == Some(3389) && rule.portRangeMin == Some(3389)) {

@@ -10,23 +10,6 @@ async fn main() {
     let mut firewall_name;
     let mut new_ip: String;
 
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() == 2 {
-        new_ip = args[1].clone();
-    } else {
-        let ip_client = getip_api_client::IpApiClient::new();
-        match ip_client.get_external_ip().await {
-            Ok(ip) => {
-                println!("Ip loaded: {:?}", ip);
-                new_ip = ip;
-            }
-            Err(e) => {
-                eprintln!("Failed to load configurations: {}", e);
-                return;
-            }
-        }
-    }
 
     match config::Config::load() {
         Ok(config) => {
@@ -40,6 +23,25 @@ async fn main() {
             return;
         }
     }
+
+
+    let args: Vec<String> = env::args().collect();
+    if args.len() == 2 {
+        new_ip = args[1].clone();
+    } else {
+        let ip_client = getip_api_client::IpApiClient::new();
+        match ip_client.get_external_ip().await {
+            Ok(ip) => {
+                println!("Ip loaded: {:?}", ip);
+                new_ip = ip;
+            }
+            Err(e) => {
+                eprintln!("Failed to retrieve IP via API: {}", e);
+                return;
+            }
+        }
+    }
+
 
     // Obtener el firewall por nombre
     match api_client.get_firewall_by_name(&firewall_name).await {
